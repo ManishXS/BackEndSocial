@@ -1,0 +1,13 @@
+/* File: src/app/app.component.css */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent scroll */
+  height: 100%;
+}
+
+router-outlet {
+  margin-top: 60px; /* Leave space for header */
+  padding-bottom: 60px; /* Leave space for navigation */
+}

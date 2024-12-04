@@ -1,0 +1,74 @@
+<div class="feeds-container">
+  <!-- Loop through each feed -->
+  <div *ngFor="let feed of feeds" class="feed-box">
+    <!-- Feed Header -->
+    <div class="feed-header">
+      <!-- User's Profile Picture -->
+      <img [src]="feed.title" alt="Profile Picture" class="profile-pic" />
+      <!-- User's Username -->
+      <span class="feed-author">{{ feed.authorUsername }}</span>
+      <!-- Message Button -->
+   
+    </div>
+
+    <!-- Feed Caption (if available) -->
+    <div *ngIf="feed.caption && feed.caption !== 'undefined' && feed.caption.trim()" class="feed-caption">
+      {{ feed.caption }}
+    </div>
+
+    <!-- Feed Content -->
+    <div class="feed-content">
+      <!-- Video Content -->
+      <div *ngIf="isVideo(feed.content); else notVideo" class="feed-video-wrapper">
+        <video-js
+          id="video-player-{{ feed.postId }}"
+          class="video-js vjs-big-play-centered"
+          [poster]="feed.thumbnail || '/assets/default-video-poster.jpg'"
+        >
+          <source [src]="feed.content" type="video/mp4" />
+        </video-js>
+      </div>
+
+      <!-- Non-Video Content (Image) -->
+      <ng-template #notVideo>
+        <img [src]="feed.content" alt="Feed Content" class="feed-image" />
+      </ng-template>
+    </div>
+
+    <!-- Feed Actions -->
+    <div class="feed-actions">
+      <!-- Like Button -->
+      <button
+        class="like-button"
+        [class.liked]="feed.likeFlag === 1"
+        (click)="likePost(feed)"
+      >
+        <i class="fas fa-heart"></i>
+        <div> {{ feed.likeCount|| 0  }} Likes</div>
+      </button>
+
+      <!-- Comment Button -->
+      <div >
+        <i class="fas fa-comment" (click)="showComments(feed)"></i>
+        {{ feed.commentCount || 0 }} Comment
+      </div>
+
+      <!-- Download Button -->
+      <div class="download-button">
+        <a [href]="feed.content" target="_self" download>
+          <i class="fas fa-download"></i> Download
+        </a>
+      </div>
+
+      <!-- Report Button -->
+      <div class="report-button">
+        <button>
+          <i class="fas fa-flag"></i> Report
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="loading-spinner">Loading...</div>
+</div>
