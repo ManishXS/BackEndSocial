@@ -1,0 +1,90 @@
+<div class="feeds-container">
+  <!-- Loop through each feed -->
+  <div *ngFor="let feed of feeds" class="feed-box">
+    <!-- Feed Header -->
+    <div class="feed-header">
+      <div>
+        <img [src]="feed.title" alt="Profile Picture" class="profile-pic" />
+        <span class="feed-author">{{ feed.authorUsername }}</span>
+      </div>
+      <span (click)="goToChatBox(feed)"> Message </span>
+    </div>
+
+    <!-- Feed Content -->
+    <div class="feed-content">
+      <!-- Video Feed -->
+      <div
+        *ngIf="isVideo(feed.content); else notVideo"
+        class="feed-video-wrapper"
+      >
+        <app-video-player
+          [src]="feed.content"
+          [poster]="feed.thumbnail || '/assets/default-video-poster.jpg'"
+          [muted]="true"
+          [loop]="true"
+        ></app-video-player>
+      </div>
+
+      <!-- Non-Video Feed -->
+      <ng-template #notVideo>
+        <img [src]="feed.content" alt="Feed Content" class="feed-image" />
+      </ng-template>
+    </div>
+
+    <div
+      *ngIf="
+        feed.caption && feed.caption !== 'undefined' && feed.caption.trim()
+      "
+      class="feed-caption"
+    >
+      {{ feed.caption }}
+    </div>
+
+    <!-- Feed Actions -->
+    <div class="actions">
+      <div class="feed-actions">
+        <!-- Like Button -->
+        <button
+          (click)="likePost(feed)"
+          *ngIf="feed.likeFlag == 0"
+          class="like"
+        >
+          <i class="fas fa-heart"></i>
+          <span>{{ feed.likeCount || 0 }}</span>
+          <span class="label">Likes</span>
+        </button>
+        <button
+          (click)="likePost(feed)"
+          *ngIf="feed.likeFlag == 1"
+          class="like liked"
+        >
+          <i class="fas fa-heart"></i>
+          <span>{{ feed.likeCount || 0 }}</span>
+          <span class="label">Likes</span>
+        </button>
+
+        <!-- Comment Button -->
+        <div class="comment-icon">
+          <i class="fas fa-comment" (click)="showComments(feed)"></i>
+          <span>{{ feed.commentCount || 0 }}</span>
+          <span class="label">Comments</span>
+        </div>
+
+        <!-- Download Button -->
+        <div>
+          <a [href]="feed.content" target="_self" download class="download">
+            <i class="fas fa-download"></i>
+            <span class="label">Download</span>
+          </a>
+        </div>
+      </div>
+      <div>
+        <button class="report-btn">Report</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="loading-spinner">Loading...</div>
+  <div *ngIf="allFeedsLoaded" class="loading-spinner">All Feeds Loaded</div>
+</div>

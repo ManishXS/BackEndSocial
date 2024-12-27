@@ -1,0 +1,9 @@
+<nav class="mobile-nav">
+  <a
+    *ngFor="let route of routes"
+    [routerLink]="route.link"
+    [ngClass]="{ active: router.url === route.link }"
+  >
+    <i [class]="route.icon"></i>
+  </a>
+</nav>
